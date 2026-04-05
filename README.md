@@ -478,12 +478,4 @@ C: [`belgeler/katki_kilavuzu.md`](belgeler/katki_kilavuzu.md) dosyasını incele
 
 ---
 
-Bu README dosyası:
-✅ DeepSeek kalitesinde detaylı  
-✅ Bol ASCII diyagramlı  
-✅ Öz Türkçe terminoloji kullanan  
-✅ Kurumsal ve ciddi  
-✅ Akademik iş birliğine açık  
-✅ Modüler yapıyı vurgulayan  
-
 Bir dokümantasyon sunuyor. GitHub'a yüklemeden önce son kontrolünü yap, eksik gördüğün yer varsa söyle, birlikte düzeltelim! 🚀🇷

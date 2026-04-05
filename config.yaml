@@ -1,0 +1,43 @@
+# ========================================================================
+# BİLGE ULUSAL AÇIK KAYNAK ZEKÂ ÇERÇEVESİ - YAPILANDIRMA DOSYASI
+# Copyright 2026 Batuhan ALGÜL
+# Licensed under Apache License 2.0
+# ========================================================================
+
+uygulama:
+  ad: "Bilge"
+  versiyon: "0.1.0-alpha"
+  dil: "tr"
+  aciklama: "Türk milletine özel, açık kaynaklı, yerel ve etik yapay zeka asistanı."
+
+arayuz:
+  tip: "terminal"  # seçenekler: terminal, web, api
+  renk_modu: true
+  dil_destegi: ["tr", "en"]
+
+model:
+  tip: "yerel_llm"  # seçenekler: yerel_llm, bulut_api
+  model_adi: "bilge-small-7b"
+  baglam_uzunlugu: 32768
+  sicaklik: 0.7
+  maksimum_yanit_uzunlugu: 2048
+
+veri_katmani:
+  vektor_ambari: "chromadb"
+  iliskisel_ambar: "sqlite"
+  onbellek: "memory"  # seçenekler: memory, redis
+
+guvenlik:
+  filtreleme_aktif: true
+  etik_kontrol: true
+  gizlilik_modu: true
+
+gunluk:
+  aktif: true
+  seviye: "INFO"  # DEBUG, INFO, WARNING, ERROR
+  dosya: "logs/bilge.log"
+
+gelistirme:
+  hata_ayiklama_modu: false
+  performans_profil: false
+  test_modu: false

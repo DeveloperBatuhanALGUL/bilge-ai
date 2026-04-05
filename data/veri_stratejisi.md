@@ -174,9 +174,4 @@ Dosya adı: `data/ornek_veri.jsonl`
 {"id": "ex-003", "category": "CAT-04", "source": "Resmi_Gazete", "content": {"prompt": "Anayasa'nın 2. maddesi nedir?", "completion": "Türkiye Cumhuriyeti, toplumun huzuru, milli dayanışma ve adalet anlayışı içinde, insan haklarına saygılı, Atatürk milliyetçiliğine bağlı, başlangıçta belirtilen temel ilkelere dayanan, demokratik, laik ve sosyal bir hukuk Devletidir."}, "quality_score": 1.0, "language": "tr", "tags": ["hukuk", "anayasa"]}
 ```
 
-Commit message:
-```
-data: ornek_veri.jsonl eklendi | data: Add sample training data file
-```
-
 ---

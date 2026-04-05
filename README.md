@@ -11,23 +11,6 @@
   <strong>"Sorunuzu bilir, cevabınızı verir; geçmişinizi anlar, geleceğinizi kurar."</strong>
 </p>
 
-##  PROJE GELİŞİM DURUMU (ROADMAP)
-
-Aşağıdaki grafik, Bilge Ulusal Açık Kaynak Zekâ Çerçevesi'nin mevcut geliştirme aşamasını ve gelecek hedeflerini göstermektedir.
-
-### 1. Görsel İlerleme Durumu
-
-```text
-PROJE YOL HARİTASI - v0.1.0-alpha
-=================================
-
-[██████░░░░░░░░░░░░░░░░] %30 - Temel Mimari & Çekirdek Motor ........ [✅ TAMAMLANDI]
-[░░░░░░░░░░░░░░░░░░░░░░] %00 - Veri İşleme Boru Hattı ............... [⏳ BEKLEMEDE]
-[░░░░░░░░░░░░░░░░░░░░░░] %00 - Gerçek LLM Entegrasyonu .............. [⏳ BEKLEMEDE]
-[░░░░░░░░░░░░░░░░░░░░░░] %00 - Web Arayüzü & API Servisi ............ [⏳ BEKLEMEDE]
-[████░░░░░░░░░░░░░░░░░░] %20 - Akademik İş Birlikleri & Literatür ... [🔄 DEVAM EDİYOR]
-
-Son Güncelleme: Nisan 2026 | Proje Lideri: Batuhan ALGÜL
 
 # 1. GİRİŞ VE STRATEJİK ÖNEM
 

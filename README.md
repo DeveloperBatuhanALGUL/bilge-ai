@@ -13,6 +13,17 @@
 
 
 
+PROJE GELİŞİM DURUMU (ROADMAP)
+==============================
+
+[██████░░░░░░░░░░░░░░░░] %30 - Temel Mimari & Çekirdek Motor (TAMAMLANDI)
+[░░░░░░░░░░░░░░░░░░░░░░] %00 - Veri İşleme Boru Hattı (BEKLEMEDE)
+[░░░░░░░░░░░░░░░░░░░░░░] %00 - Gerçek LLM Entegrasyonu (BEKLEMEDE)
+[░░░░░░░░░░░░░░░░░░░░░░] %00 - Web Arayüzü & API (BEKLEMEDE)
+[░░░░░░░░░░░░░░░░░░░░░░] %00 - Akademik İş Birlikleri (BAŞLATILDI)
+
+Son Güncelleme: Nisan 2026
+
 # 1. GİRİŞ VE STRATEJİK ÖNEM
 
 **Bilge**, Türk milletinin dijital egemenliğini güçlendirmek, yapay zekâ teknolojilerinde dışa bağımlılığı kırmak ve Türkçe'nin morfolojik derinliğine uygun, yerel olarak çalışabilen açık kaynaklı bir zekâ asistanı altyapısıdır. Proje, **Batuhan ALGÜL** (Kıdemli Geliştirici) öncülüğünde, sıfırdan inşa edilen modüler bileşenlerle üniversitelerden sivil toplum kuruluşlarına kadar geniş bir katılımcı ağına hitap etmektedir.
@@ -123,6 +134,8 @@ Bilge, katmanlı ve olay güdümlü (event-driven) bir mimari üzerine inşa edi
 
 ## 3. MODEL KARŞILAŞTIRMA TABLOSU
 
+
+
 Bilge, farklı boyutlardaki dil modellerini destekler. Aşağıdaki tablo, desteklenen modellerin özelliklerini göstermektedir.
 
 | Model Adı | Parametre Sayısı | Bağlam Uzunluğu | Türkçe Destek | Yerel Çalışma | İndirme Bağlantısı |
@@ -134,6 +147,8 @@ Bilge, farklı boyutlardaki dil modellerini destekler. Aşağıdaki tablo, deste
 | **Bilge-XLarge** | 70B | 128K | ✅ Tam | ❌ Sunucu Gerekli | [HuggingFace](#) |
 
 > **Not:** Tüm modeller, Türkçe morfolojik yapıya özel ince ayar (fine-tuning) ile eğitilmiştir.
+
+
 
 ---
 

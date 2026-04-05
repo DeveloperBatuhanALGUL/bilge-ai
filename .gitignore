@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+*.db
+*.sqlite3
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Config
+config.local.yaml
+.env
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# Model weights (if downloaded locally)
+models/*.bin
+models/*.pt
+models/*.pth
+
+# Data files (if sensitive or large)
+data/raw/
+data/processed/
+
+# Documentation build output
+docs/_build/
+docs/.doctrees/

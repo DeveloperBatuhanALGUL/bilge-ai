@@ -426,7 +426,7 @@ Detaylar için [`LICENSE`](LICENSE) dosyasını inceleyiniz.
 
 - **GitHub Issues:** Hata bildirimleri ve özellik önerileri için
 - **GitHub Discussions:** Genel tartışmalar ve sorular için
-- **E-posta:** batuhan.algul@example.com (resmi iletişim)
+- **E-posta:** batuhanalgul@proton.me (resmi iletişim)
 
 ### 11.2. Sık Sorulan Sorular (SSS)
 
@@ -447,7 +447,7 @@ C: [`belgeler/katki_kilavuzu.md`](belgeler/katki_kilavuzu.md) dosyasını incele
 
 **Batuhan ALGÜL**  
 *Kıdemli Geliştirici & Sistem Mimarı*  
-[GitHub](https://github.com/DeveloperBatuhanALGUL) | [LinkedIn](#) | [E-posta](mailto:batuhan.algul@example.com)
+[GitHub](https://github.com/DeveloperBatuhanALGUL) | [LinkedIn](#) | [E-posta](mailto:batuhanalgul@proton.me)
 
 ### 12.2. Katkıda Bulunanlar
 

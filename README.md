@@ -480,5 +480,3 @@ C: [`belgeler/katki_kilavuzu.md`](belgeler/katki_kilavuzu.md) dosyasını incele
 </p>
 
 ---
-
-Bir dokümantasyon sunuyor. GitHub'a yüklemeden önce son kontrolünü yap, eksik gördüğün yer varsa söyle, birlikte düzeltelim! 🚀🇷

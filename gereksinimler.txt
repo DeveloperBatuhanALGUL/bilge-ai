@@ -17,3 +17,12 @@ requests>=2.31.0
 beautifulsoup4>=4.12.0
 feedparser>=6.0.0
 python-dateutil>=2.8.0
+
+
+# --- EĞİTİM VE İNCE AYAR KÜTÜPHANELERİ ---
+peft>=0.8.0          # LoRA adaptörleri için
+trl>=0.7.0           # SFTTrainer (Supervised Fine-Tuning) için
+datasets>=2.14.0     # Veri setlerini yüklemek için
+accelerate>=0.20.0   # Çoklu GPU/CPU dağıtımı için
+bitsandbytes>=0.41.0 # Modeli 4-bit'e sıkıştırarak bellekten tasarruf etmek için
+wandb                # (Opsiyonel) Eğitim metriklerini görselleştirmek için

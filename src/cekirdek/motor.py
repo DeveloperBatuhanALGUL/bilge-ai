@@ -1,57 +1,54 @@
 """
 Bilge Ulusal Açık Kaynak Zekâ Çerçevesi
-Modül: Çekirdek Motor (Core Engine)
-Tanım: Girdi işleme, bağlam yönetimi ve yanıt üretimini koordine eden ana sınıf.
+Modül: Çekirdek Motor (Core Engine) - GÜNCELLENMİŞ
+Tanım: Girdi işleme, bağlam yönetimi, vektör arama ve yanıt üretimini koordine eder.
 Yazar: Batuhan ALGÜL
 Tarih: 2026
 """
-
 import logging
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, List
 from datetime import datetime
 
-# Yerel modüllerden arayüzleri içe aktar
+# Arayüzler
 from ..modeller.tabani import DilModeliTabani
 from ..veri_katmani.ambar_tabani import VeriAmbariTabani
+from ..veri_katmani.vektor_ambari import VektorAmbariTabani
 
-# Loglama ayarları
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger("BilgeMotor")
 
 class BilgeMotoru:
     """
     Bilge'nin ana işlem motoru.
-    Kullanıcı girdisini alır, gerekli modülleri çağırır ve yanıtı döndürür.
     """
 
-    def __init__(self, model: DilModeliTabani, hafiza: VeriAmbariTabani):
+    def __init__(self, model: DilModeliTabani, hafiza: VeriAmbariTabani, vektor_ambari: Optional[VektorAmbariTabani] = None):
         """
-        Motoru başlatır.
-        
         Args:
-            model (DilModeliTabani): Kullanılacak dil modeli örneği.
-            hafiza (VeriAmbariTabani): Bağlam ve geçmiş verileri saklayan ambar.
+            model: Dil modeli örneği.
+            hafiza: Sohbet geçmişi ambarı.
+            vektor_ambari: Bilgi havuzu (Opsiyonel).
         """
         if not isinstance(model, DilModeliTabani):
             raise TypeError("Model, DilModeliTabani arayüzünü uygulamalıdır.")
         if not isinstance(hafiza, VeriAmbariTabani):
             raise TypeError("Hafiza, VeriAmbariTabani arayüzünü uygulamalıdır.")
-
+            
         self.model = model
         self.hafiza = hafiza
+        self.vektor_ambari = vektor_ambari
         self.aktif_mi = False
+        
         logger.info("Bilge Motoru başlatıldı.")
 
     def baslat(self) -> bool:
-        """
-        Motoru ve bağlı bileşenleri aktif eder.
-        
-        Returns:
-            bool: Başarılı ise True.
-        """
         try:
             self.model.baslat()
             self.hafiza.baglan()
+            
+            if self.vektor_ambari:
+                self.vektor_ambari.baslat()
+                
             self.aktif_mi = True
             logger.info("Bilge Motoru aktif edildi.")
             return True
@@ -60,41 +57,50 @@ class BilgeMotoru:
             return False
 
     def dusun_ve_cevapla(self, soru: str, oturum_id: str = "default") -> Dict[str, Any]:
-        """
-        Kullanıcı sorusunu işler ve yanıt üretir.
-        
-        Args:
-            soru (str): Kullanıcının sorduğu soru.
-            oturum_id (str): Oturumu takip etmek için benzersiz ID.
-            
-        Returns:
-            dict: Yanıt metni, meta veriler ve durum bilgisi içeren sözlük.
-        """
         if not self.aktif_mi:
             return {"hata": "Motor aktif değil.", "basarili": False}
 
         zaman_damgasi = datetime.now().isoformat()
         
         try:
-            # 1. Geçmiş Bağlamı Getir
+            # 1. Geçmiş Bağlamı Getir (Sohbet Geçmişi)
             gecmis = self.hafiza.getir(oturum_id) or []
             
-            # 2. Modelden Yanıt Al (Basitçe girdiyi modele gönderiyoruz)
-            # Not: Gerçek implementasyonda buraya 'prompt engineering' katmanı gelecek.
-            yanit_metni = self.model.tahmin_et(soru, baglam={"gecmis": gecmis})
+            # 2. Vektör Ambarından İlgili Bilgi Ara (RAG - Retrieval Augmented Generation)
+            baglam_metinleri = []
+            if self.vektor_ambari:
+                # Soruyla en alakalı 3 belgeyi bul
+                ilgili_belgeler = self.vektor_ambari.ara(sorgu=soru, k_sayisi=3)
+                
+                for belge in ilgili_belgeler:
+                    # Sadece metni alıp bağlama ekle
+                    baglam_metinleri.append(belge['metin'])
             
-            # 3. Geçmişi Güncelle
-            yeni_gecmis = gecmis + [{"rol": "user", "icerik": soru}, {"rol": "assistant", "icerik": yanit_metni}]
+            # 3. Model İçin Nihai Bağlamı Oluştur
+            # Eğer vektör aramasından sonuç geldiyse, bunları sisteme dahil et
+            tam_baglam = {
+                "gecmis": gecmis,
+                "bilgi_parcalari": baglam_metinleri # Yeni eklenen kısım
+            }
+            
+            # 4. Modelden Yanıt Al
+            yanit_metni = self.model.tahmin_et(soru, baglam=tam_baglam)
+            
+            # 5. Geçmişi Güncelle
+            yeni_gecmis = gecmis + [
+                {"rol": "user", "icerik": soru}, 
+                {"rol": "assistant", "icerik": yanit_metni}
+            ]
             self.hafiza.kaydet(oturum_id, yeni_gecmis)
             
             sonuc = {
                 "yanit": yanit_metni,
                 "oturum_id": oturum_id,
                 "zaman": zaman_damgasi,
+                "kullanilan_belge_sayisi": len(baglam_metinleri),
                 "basarili": True
             }
             
-            logger.debug(f"Oturum {oturum_id} için yanıt üretildi.")
             return sonuc
 
         except Exception as e:
@@ -106,10 +112,11 @@ class BilgeMotoru:
             }
 
     def durdur(self) -> None:
-        """Motoru ve kaynakları kapatır."""
         try:
             self.model.durdur()
             self.hafiza.kapat()
+            if self.vektor_ambari:
+                self.vektor_ambari.kapat()
             self.aktif_mi = False
             logger.info("Bilge Motoru durduruldu.")
         except Exception as e:

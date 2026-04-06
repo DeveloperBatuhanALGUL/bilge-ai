@@ -7,55 +7,75 @@ Tarih: 2026
 """
 import sys
 import os
-sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from cekirdek.motor import BilgeMotoru
+from cekirdek.yapilandirma import YapilandirmaYonetici
+from cekirdek.baglam import BaglamYonetici
+from cekirdek.boru_hatti import GirdiIslemeHatti
 from modeller.yerel_llm import YerelLLM
 from veri_katmani.iliskisel_ambar import IliskiselAmbar
 from veri_katmani.onbellek import AnlikBellek
-from cekirdek.baglam import BaglamYonetici
-import yaml
 
 def main():
-    # Yapılandırma yükle
-    with open('ayarlar/varsayilan.yaml', 'r', encoding='utf-8') as f:
-        config = yaml.safe_load(f)
+    print("=" * 60)
+    print("BİLGE ULUSAL AÇIK KAYNAK ZEKÂ ÇERÇEVESİ v0.1.0-alpha")
+    print("=" * 60)
+    
+    # 1. Yapılandırma
+    config_mgr = YapilandirmaYonetici("config.yaml")
+    if not config_mgr.ayarlar:
+        print("HATA: config.yaml yüklenemedi.")
+        return
 
-    # Bileşenleri başlat
-    model = YerelLLM(model_adi=config['model']['model_adi'])
+    # 2. Bileşenler
+    model_adi = config_mgr.getir('model.model_adi', 'google/flan-t5-base')
+    model = YerelLLM(model_adi=model_adi)
     
     kisa_hafiza = AnlikBellek()
     uzun_hafiza = IliskiselAmbar(db_yolu="data/hafiza.db")
     hafiza_yonetici = BaglamYonetici(kisa_hafiza, uzun_hafiza)
     
     motor = BilgeMotoru(model=model, hafiza=hafiza_yonetici)
+    boru_hatti = GirdiIslemeHatti()
     
     if not motor.baslat():
-        print("❌ Motor başlatılamadı.")
+        print("HATA: Motor başlatılamadı.")
         return
 
-    print("🧠 Bilge hazır. Sorularınızı sorun. ('cikis' yazarak çıkabilirsiniz.)")
+    print("\nBilge hazır. ('cikis' yazarak çıkabilirsiniz.)\n")
     
     oturum_id = "terminal_oturumu_1"
     
     while True:
         try:
-            soru = input("\n➡️ Siz: ").strip()
-            if soru.lower() in ['cikis', 'quit', 'exit']:
+            ham_soru = input("Siz: ")
+            
+            if ham_soru.lower() in ['cikis', 'quit', 'exit', 'q']:
                 break
             
-            if not soru:
+            if not ham_soru.strip():
                 continue
                 
-            sonuc = motor.dusun_ve_cevapla(soru, oturum_id=oturum_id)
+            # --- YENİ EKLENECEK KISIM ---
+            # Girdiyi boru hattından geçir
+            islenmis_veri = boru_hatti.isle(ham_soru)
+            
+            if islenmis_veri['hata']:
+                print(f"Hata (İşleme): {islenmis_veri['hata']}")
+                continue
+                
+            # Sadece temizlenmiş metni motora gönder
+            sonuc = motor.dusun_ve_cevapla(islenmis_veri['temiz'], oturum_id=oturum_id)
+            # ---------------------------
             
             if sonuc['basarili']:
-                print(f"\n🤖 Bilge: {sonuc['yanit']}")
+                print(f"\nBilge: {sonuc['yanit']}\n")
             else:
-                print(f"\n⚠️ Hata: {sonuc.get('hata', 'Bilinmeyen hata')}")
+                print(f"\nHata: {sonuc.get('hata', 'Bilinmeyen hata')}\n")
                 
         except KeyboardInterrupt:
-            print("\n\n👋 Görüşürüz!")
+            print("\n\nGörüşürüz!")
             break
         except EOFError:
             break

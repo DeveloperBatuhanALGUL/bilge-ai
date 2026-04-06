@@ -1,6 +1,6 @@
 """
 Bilge Ulusal Açık Kaynak Zekâ Çerçevesi
-Modül: Çekirdek Motor (Core Engine) - ASYNC ENTİGRE
+Modül: Çekirdek Motor (Core Engine) - PERFORMANS ENTEGRE
 Tanım: Girdi işleme, bağlam yönetimi ve yanıt üretimini asenkron koordine eder.
 Yazar: Batuhan ALGÜL
 Tarih: 2026
@@ -18,13 +18,14 @@ from .guvenlik_suzgeci import GuvenlikSuzgeci
 from .gunlukcu import gunlukcu
 from .yapilandirma import YapilandirmaYonetici
 from .boru_hatti import GirdiIslemeHatti
+from .performans_izleyici import PerformansOlcer
 
 logger = logging.getLogger("BilgeMotor")
 
 class BilgeMotoru:
     """
     Bilge'nin ana işlem motoru.
-    Asenkron akış sağlar.
+    Asenkron akış sağlar ve performans metriklerini toplar.
     """
 
     def __init__(self, model: DilModeliTabani, hafiza: VeriAmbariTabani, 
@@ -43,7 +44,7 @@ class BilgeMotoru:
         self.boru_hatti = GirdiIslemeHatti()
         
         self.aktif_mi = False
-        gunlukcu.bilgi("Bilge Motoru (Async) başlatıldı.")
+        gunlukcu.bilgi("Bilge Motoru (Async + PerfMon) başlatıldı.")
 
     def baslat(self) -> bool:
         try:
@@ -57,9 +58,11 @@ class BilgeMotoru:
             gunlukcu.hata(f"Motor başlatılırken hata: {e}")
             return False
 
+    @PerformansOlcer.asenkron_sure_olcer
     async def dusun_ve_cevapla(self, soru: str, oturum_id: str = "default") -> Dict[str, Any]:
         """
         Asenkron düşünme ve cevaplama süreci.
+        Tüm adımlar performans izleyici tarafından loglanır.
         """
         if not self.aktif_mi:
             return {"hata": "Motor aktif değil.", "basarili": False}

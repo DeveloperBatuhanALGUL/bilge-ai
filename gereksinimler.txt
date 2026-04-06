@@ -55,3 +55,6 @@ pydantic>=2.0.0
 
 # Diğer
 typing-extensions>=4.0.0
+
+
+pytest>=7.0.0

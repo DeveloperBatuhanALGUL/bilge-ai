@@ -31,10 +31,10 @@ def main():
     tum_belgeler = []
 
     # 2. Kaynak 1: TBMM Genel Kurul Tutanakları (Örnek RSS veya Link)
-    # Not: TBMM'nin resmi RSS adresi değişebilir, güncel linki kontrol etmelisin.
+    # Not: TBMM'nin resmi RSS adresi değişebilir, güncel linki kontrol etmelisiniz.
     # Burada örnek olarak genel bir haber RSS'si kullanıyoruz, sen TBMM linkini buraya koyabilirsin.
     tbmm_rss = "https://www.tbmm.gov.tr/rss/genelkurul.xml" 
-    # Eğer bu link çalışmazsa, alternatif bir haber kaynağı deneyelim:
+    # Eğer bu link çalışmazsa, alternatif bir haber kaynağı deneyebilirsiniz:
     alternatif_haber = "https://www.trthaber.com/manset_articles.rss"
     
     logger.info("Haber/RSS verileri çekiliyor...")

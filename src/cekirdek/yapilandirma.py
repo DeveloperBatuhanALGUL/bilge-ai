@@ -1,38 +1,52 @@
 """
 Bilge Ulusal Açık Kaynak Zekâ Çerçevesi
 Modül: Yapılandırma Yöneticisi
-Tanım: YAML yapılandırma dosyasını yükler ve erişim sağlar.
+Tanım: YAML yapılandırma dosyalarını okur ve yönetir.
 Yazar: Batuhan ALGÜL
 Tarih: 2026
 """
 import yaml
 import os
-import logging
-
-logger = logging.getLogger("BilgeYapilandirma")
+from .gunlukcu import gunlukcu
 
 class YapilandirmaYonetici:
-    def __init__(self, config_yolu: str = "config.yaml"):
-        self.config_yolu = config_yolu
+    """
+    Uygulama ayarlarını merkezi olarak yöneten sınıf.
+    Hiyerarşik YAML yapısını düz anahtarlarla sorgulamaya izin verir.
+    """
+
+    def __init__(self, dosya_yolu: str = "config.yaml"):
+        self.dosya_yolu = dosya_yolu
         self.ayarlar = {}
         self.yukle()
 
-    def yukle(self) -> bool:
+    def yukle(self):
         try:
-            if not os.path.exists(self.config_yolu):
-                logger.error(f"Yapılandırma dosyası bulunamadı: {self.config_yolu}")
-                return False
+            if not os.path.exists(self.dosya_yolu):
+                gunlukcu.hata(f"Yapılandırma dosyası bulunamadı: {self.dosya_yolu}")
+                raise FileNotFoundError(f"{self.dosya_yolu} dosyası eksik.")
             
-            with open(self.config_yolu, 'r', encoding='utf-8') as f:
+            with open(self.dosya_yolu, 'r', encoding='utf-8') as f:
                 self.ayarlar = yaml.safe_load(f)
             
-            logger.info("Yapılandırma başarıyla yüklendi.")
-            return True
+            gunlukcu.bilgi("Yapılandırma başarıyla yüklendi.")
+            
         except Exception as e:
-            logger.error(f"Yapılandırma yüklenirken hata: {e}")
-            return False
+            gunlukcu.hata(f"Yapılandırma yüklenirken hata: {e}")
+            raise e
 
     def getir(self, anahtar_yolu: str, varsayilan=None):
+        """
+        Nokta notasyonu ile iç içe geçmiş ayarlara erişir.
+        Örnek: getir('model.model_adi') -> "bilge-small-7b"
+        
+        Args:
+            anahtar_yolu (str): Ayarın yolu (nokta ile ayrılmış).
+            varsayilan: Anahtar bulunamazsa dönecek değer.
+            
+        Returns:
+            Any: Ayar değeri.
+        """
         keys = anahtar_yolu.split('.')
         deger = self.ayarlar
         

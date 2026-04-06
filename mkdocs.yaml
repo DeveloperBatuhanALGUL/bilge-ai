@@ -1,0 +1,28 @@
+site_name: Bilge AI Dokümantasyonu
+site_description: Ulusal Açık Kaynak Zekâ Çerçevesi Teknik Dokümantasyonu
+theme:
+  name: material
+  language: tr
+  features:
+    - navigation.tabs
+    - search.highlight
+    - content.code.copy
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+          options:
+            show_source: true
+            show_root_heading: true
+
+nav:
+  - Giriş: index.md
+  - Mimari: mimari.md
+  - API Referansı:
+      - Çekirdek Modüller: api/cekirdek.md
+      - Dil İşlem: api/dil_islem.md
+      - Veri Katmanı: api/veri_katmani.md
+  - Katkı Kılavuzu: katki_kilavuzu.md

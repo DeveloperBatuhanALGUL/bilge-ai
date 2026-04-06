@@ -1,7 +1,7 @@
 """
 Bilge Ulusal Açık Kaynak Zekâ Çerçevesi
 Modül: İlişkisel Veri Ambarı (SQLite)
-Tanım: Oturum geçmişini SQLite veritabanında saklar.
+Tanım: Oturum geçmişini kalıcı olarak saklar.
 Yazar: Batuhan ALGÜL
 Tarih: 2026
 """
@@ -16,7 +16,6 @@ logger = logging.getLogger("BilgeIliskiselAmbar")
 class IliskiselAmbar(VeriAmbariTabani):
     """
     SQLite tabanlı ilişkisel veri ambarı.
-    Oturum geçmişini kalıcı olarak saklar.
     """
 
     def __init__(self, db_yolu: str = "data/hafiza.db"):
@@ -25,6 +24,10 @@ class IliskiselAmbar(VeriAmbariTabani):
 
     def baglan(self) -> bool:
         try:
+            # data klasörünün var olduğundan emin ol
+            import os
+            os.makedirs(os.path.dirname(self.db_yolu), exist_ok=True)
+            
             self.baglanti = sqlite3.connect(self.db_yolu)
             self._tablo_olustur()
             logger.info("SQLite ambarına bağlanıldı.")
@@ -45,6 +48,9 @@ class IliskiselAmbar(VeriAmbariTabani):
         self.baglanti.commit()
 
     def getir(self, oturum_id: str) -> Optional[List[Dict[str, Any]]]:
+        if not self.baglanti:
+            return None
+            
         cursor = self.baglanti.cursor()
         cursor.execute('SELECT gecmis_json FROM oturum_gecmisi WHERE oturum_id = ?', (oturum_id,))
         row = cursor.fetchone()
@@ -53,6 +59,9 @@ class IliskiselAmbar(VeriAmbariTabani):
         return None
 
     def kaydet(self, oturum_id: str, gecmis: List[Dict[str, Any]]) -> bool:
+        if not self.baglanti:
+            return False
+            
         try:
             cursor = self.baglanti.cursor()
             gecmis_json = json.dumps(gecmis, ensure_ascii=False)

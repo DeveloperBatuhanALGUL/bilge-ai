@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bilge AI - Ulusal Zeka Asistanı</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+    <header>
+        <div style="display: flex; align-items: baseline;">
+            <span class="logo-text">BİLGE</span>
+            <span class="logo-subtitle">Ulusal Açık Kaynak Zekâ Çerçevesi</span>
+        </div>
+        <div class="status-indicator">
+            <div class="status-dot"></div>
+            Sistem Aktif
+        </div>
+    </header>
+
+    <div id="chat-container">
+        <!-- Mesajlar buraya dinamik olarak eklenecek -->
+        <div class="message bot">
+            <strong>Bilge:</strong> Merhaba! Ben Bilge. Türkçe morfolojik yapıya hakim, yerel ve etik zeka asistanınızım. Size nasıl yardımcı olabilirim?
+        </div>
+    </div>
+
+    <div id="input-area">
+        <div class="input-wrapper">
+            <input type="text" id="user-input" placeholder="Sorunuzu buraya yazın..." autocomplete="off">
+            <button id="send-btn">Gönder</button>
+        </div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

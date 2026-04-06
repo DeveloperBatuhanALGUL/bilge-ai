@@ -1,0 +1,38 @@
+========================================================================
+BİLGE MODEL EĞİTİM YAPILANDIRMASI
+Copyright 2026 Batuhan ALGÜL
+========================================================================
+
+model:
+  temeli: "meta-llama/Llama-3-8b" # Veya "mistralai/Mistral-7B-v0.1"
+  tip: "causal_lm"               # Dil modelleme tipi
+
+veri_seti:
+  yol: "data/egitim_verisi.jsonl" # JSONL formatındaki eğitim verisi
+  test_bolunmesi: 0.1             # %10'u test için ayrılır
+
+lo_ra_ayarlari: # Low-Rank Adaptation Ayarları
+  r: 16                           # LoRA rank'ı (daha yüksek = daha fazla kapasite)
+  lora_alpha: 32                  # Ölçeklendirme faktörü
+  lora_dropout: 0.05              # Dropout oranı
+  hedef_moduller:                 # Hangi katmanlara LoRA uygulanacak?
+    - "q_proj"
+    - "v_proj"
+    - "k_proj"
+    - "o_proj"
+    - "gate_proj"
+    - "up_proj"
+    - "down_proj"
+
+egitim_parametreleri:
+  cikti_dizini: "ciktilar/bilge-finetuned"
+  batch_buyuklugu: 4              # GPU belleğine göre ayarla
+  gradyan_toplama_adimlari: 4     # Efektif batch size = 4 * 4 = 16
+  ogrenme_hizi: 2e-4              # 0.0002
+  max_adim_sayisi: 1000           # Toplam eğitim adımı
+  sicaklik: 0.7                   # Çıktı çeşitliliği
+  kosullu_uretim_boyutu: 2048     # Maksimum yanıt uzunluğu
+
+donanim:
+  cihaz: "cuda"                   # "cpu" veya "cuda"
+  bit_sikistirma: 4               # 4-bit quantization (Bellek tasarrufu için)

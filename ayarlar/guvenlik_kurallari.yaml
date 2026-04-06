@@ -1,0 +1,48 @@
+========================================================================
+BİLGE GÜVENLİK VE ETİK KURALLARI SETİ
+Copyright 2026 Batuhan ALGÜL
+========================================================================
+
+# 1. YASAKLI İÇERİK KATEGORİLERİ (Kelimeler ve Kalıplar)
+yasakli_icerik:
+  nefret_soylemi: true
+  siddet_icerigi: true
+  cinsel_icerik: true
+  yasadisi_faaliyet: true # Hırsızlık, bombalama vb. talimatları
+  kumar_ve_bahis: true
+  intihar_ve_self_harm: true
+
+# 2. SİSTEM KORUMA KURALLARI (Prompt Injection Önleme)
+sistem_koruma:
+  # Aşağıdaki kelimeleri içeren girdiler derhal reddedilir
+  red_kelimeler:
+    - "ignore previous instructions"
+    - "önceki talimatları yok say"
+    - "system prompt"
+    - "gizli anahtar"
+    - "api key"
+    - "admin modu"
+    - "developer mode"
+    - "DAN" # Jailbreak tekniği
+    - "serbest mod"
+  
+  # Sistem promtunu ifşa etmeye çalışan sorular
+  red_sorular:
+    - "sen nasıl çalışıyorsun?"
+    - "prompt'un ne?"
+    - "kuralların nelerdir?"
+
+# 3. KİŞİSEL VERİ KORUMA (PII Masking)
+kisisel_veri:
+  aktif: true
+  maskelenecek_veriler:
+    - tc_kimlik_no      # 11 haneli sayılar
+    - telefon_no        # 05xx xxx xx xx formatı
+    - email_adresi      # @ içeren yapılar
+    - kredi_karti       # 16 haneli sayılar
+
+# 4. ETİK ÇERÇEVE
+etik_cerceve:
+  tarafsizlik_zorunlu: true # Siyasi/dini önyargı içermeme
+  bilimsel_temel: true      # Bilimsel olmayan iddialara karşı uyarı
+  saygili_dil: true         # Küfür ve hakaret içermeme

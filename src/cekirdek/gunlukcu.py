@@ -11,11 +11,11 @@ from logging.handlers import RotatingFileHandler
 
 class BilgeGunlukcu:
     """
-    Mercezi loglama sınıfı.
-    Hem konsola hem de dosyaya yazar.
+    Mercezi loglama sınıfı. Singleton pattern ile tekil erişim sağlar.
+    Hem konsola hem de dönen dosya (rotating file) sistemine yazar.
     """
     
-    _ornek = None # Singleton pattern için
+    _ornek = None # Singleton örneği
 
     def __new__(cls):
         if cls._ornek is None:
@@ -31,18 +31,18 @@ class BilgeGunlukcu:
         self.logger = logging.getLogger("BilgeAI")
         self.logger.setLevel(logging.DEBUG)
         
-        # Formatlayıcı
+        # Formatlayıcı: Tarih - Modül - Seviye - Mesaj
         formatter = logging.Formatter(
             '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
             datefmt='%Y-%m-%d %H:%M:%S'
         )
         
-        # Konsol İşleyicisi
+        # Konsol İşleyicisi (Terminal çıktısı)
         console_handler = logging.StreamHandler()
         console_handler.setFormatter(formatter)
         self.logger.addHandler(console_handler)
         
-        # Dosya İşleyicisi (Rotating: Eski logları siler/yeni açar)
+        # Dosya İşleyicisi (5MB'de bir yeni dosya açar, en fazla 3 yedek tutar)
         file_handler = RotatingFileHandler(
             'logs/bilge.log', 
             maxBytes=5*1024*1024, # 5 MB
@@ -63,5 +63,5 @@ class BilgeGunlukcu:
     def ayikla(self, mesaj: str):
         self.logger.debug(mesaj)
 
-# Global erişim için
+# Global erişim için tekil örnek
 gunlukcu = BilgeGunlukcu()

@@ -1,6 +1,6 @@
 """
 Bilge Ulusal Açık Kaynak Zekâ Çerçevesi
-Modül: Uçbirim Arayüzü (CLI)
+Modül: Uçbirim Arayüzü (CLI) - GÜNCELLENMİŞ
 Tanım: Terminal üzerinden kullanıcı ile etkileşim sağlar.
 Yazar: Batuhan ALGÜL
 Tarih: 2026
@@ -16,6 +16,7 @@ from cekirdek.boru_hatti import GirdiIslemeHatti
 from modeller.yerel_llm import YerelLLM
 from veri_katmani.iliskisel_ambar import IliskiselAmbar
 from veri_katmani.onbellek import AnlikBellek
+from veri_katmani.chroma_impl import ChromaAmbar
 
 def main():
     print("=" * 60)
@@ -32,11 +33,16 @@ def main():
     model_adi = config_mgr.getir('model.model_adi', 'google/flan-t5-base')
     model = YerelLLM(model_adi=model_adi)
     
+    # Hafıza Katmanı
     kisa_hafiza = AnlikBellek()
     uzun_hafiza = IliskiselAmbar(db_yolu="data/hafiza.db")
     hafiza_yonetici = BaglamYonetici(kisa_hafiza, uzun_hafiza)
     
-    motor = BilgeMotoru(model=model, hafiza=hafiza_yonetici)
+    # Vektör Ambarı Katmanı (ChromaDB)
+    vektor_ambari = ChromaAmbar(kalici_yol="data/vectores_db")
+    
+    # Motor
+    motor = BilgeMotoru(model=model, hafiza=hafiza_yonetici, vektor_ambari=vektor_ambari)
     boru_hatti = GirdiIslemeHatti()
     
     if not motor.baslat():
@@ -57,19 +63,19 @@ def main():
             if not ham_soru.strip():
                 continue
                 
-            # --- YENİ EKLENECEK KISIM ---
-            # Girdiyi boru hattından geçir
+            # Girdiyi işle
             islenmis_veri = boru_hatti.isle(ham_soru)
             
             if islenmis_veri['hata']:
                 print(f"Hata (İşleme): {islenmis_veri['hata']}")
                 continue
                 
-            # Sadece temizlenmiş metni motora gönder
+            # Motoru çalıştır
             sonuc = motor.dusun_ve_cevapla(islenmis_veri['temiz'], oturum_id=oturum_id)
-            # ---------------------------
             
             if sonuc['basarili']:
+                # Kullanıcıya kaç belge kullanıldığını göster (opsiyonel debug bilgisi)
+                # print(f"[{sonuc.get('kullanilan_belge_sayisi', 0)} belge tarandı]")
                 print(f"\nBilge: {sonuc['yanit']}\n")
             else:
                 print(f"\nHata: {sonuc.get('hata', 'Bilinmeyen hata')}\n")
